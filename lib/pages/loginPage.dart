@@ -88,6 +88,8 @@ class _LoginPageState extends State<LoginPage> {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
+
+
       );
 
       // Handle successful sign-up
