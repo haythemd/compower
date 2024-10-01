@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/todo.dart';
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
 
   final String title;
 
@@ -13,97 +10,105 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  List<ToDo> todos = [
-    ToDo(
-      id: 1,
-      title: 'Grocery Shopping',
-      description: 'Buy milk, eggs, bread, and cheese from the supermarket.',
-      price: 55.0,
-      isDone: false,
-      index: 0,
-      groupId: 1,
-    ),
-    ToDo(
-      id: 2,
-      title: 'Pay Bills',
-      description: 'Pay electricity and internet bills.',
-      price: 120.0,
-      isDone: true,
-      index: 1,
-      groupId: 2,
-    ),
-    ToDo(
-      id: 3,
-      title: 'Book Appointment',
-      description: 'Book a doctor appointment for next week.',
-      price: 50.0,
-      isDone: false,
-      index: 2,
-      groupId: 3,
-    ),
-    ToDo(
-      id: 4,
-      title:'Pick up Laundry',
-      description: 'Pick up the laundry from the dry cleaners.',
-      price: 15.0,
-      isDone: true,
-      index: 3,
-      groupId: 1,
-    ),
-    ToDo(
-      id: 5,
-      title: 'Call Mom',
-      description: 'Call mom and wish her a happy birthday.',
-      price: 0.0,
-      isDone: false,
-      index: 4,
-      groupId: 4,
-    ),
-    ToDo(
-      id: 6,
-      title: 'Finish Project',
-      description: 'Complete the project report and submit it by tomorrow.',
-      price: 0.0,
-      isDone: false,
-      index: 5,
-      groupId: 2,
-    ),
+  List<Map<String, String>> projects = [
+    {
+      'title': 'comPower',
+      'description': 'open source personal diary app ios & android',
+      'image': 'assets/images/kawaii_earth.png',
+    },
+    {
+      'title': 'comCoffee Tunis',
+      'description': 'a community-managed coffee store',
+      'image': 'assets/images/image.png',
+    },
   ];
-
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: ListView(
+      body: Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: BoxDecoration(color: const Color(0xFFFFF3D0)),
+        child: Column(
           children: [
-            const ListTile(title: Text('Item'),trailing: Text('Price'),),
-            ...todos.map((e)=>ListTile(leading: Text(e.id.toString()), title: Text(e.title),subtitle: Text(e.description),trailing: Text("${e.price.toStringAsFixed(2)} \$"),) )
+            SizedBox(height: screenHeight * 0.02),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'my Projects',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const Text(
+                    'explore',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(color: Color(0xFFD9D9D9), thickness: 2),
+            SizedBox(height: screenHeight * 0.02),
+            Expanded(
+              child: ListView.builder(
+                itemCount: projects.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Container(
+                      color: Colors.white,
+                      child: ListTile(
+                        leading: Image.asset(
+                          projects[index]['image']!,
+                          width: 50,
+                          height: 50,
+                        ),
+                        title: Text(
+                          projects[index]['title']!,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Kumbh Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        subtitle: Text(
+                          projects[index]['description']!,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: 'Kumbh Sans',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios, color: Colors.black),
+                        onTap: () {
+                          // Handle project click
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
