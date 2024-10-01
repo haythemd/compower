@@ -94,8 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ListView(
           children: [
-            ListTile(title: Text('Item'),trailing: Text('Price'),),
-            ...todos.map((e)=>ListTile(leading: Text(e.id.toString()), title: Text(e.title),subtitle: Text(e.description),trailing: Text(e.price.toStringAsFixed(2)+" \$"),) )
+            const ListTile(title: Text('Item'),trailing: Text('Price'),),
+            ...todos.map((e)=>ListTile(leading: Text(e.id.toString()), title: Text(e.title),subtitle: Text(e.description),trailing: Text("${e.price.toStringAsFixed(2)} \$"),) )
           ],
         ),
       ),
