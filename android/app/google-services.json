@@ -1,0 +1,190 @@
+{
+  "project_info": {
+    "project_number": "746076934359",
+    "project_id": "finance-app-71dd3",
+    "storage_bucket": "finance-app-71dd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746076934359:android:7463847a25dfe7ca74e092",
+        "android_client_info": {
+          "package_name": "com.financeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5o_gTTKLtURrt5BfAhwWYzQKHfidKnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746076934359-61a53iuumksuim5ue78g7t100227r9qs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friend.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746076934359:android:f08b190c13c5cb2f74e092",
+        "android_client_info": {
+          "package_name": "com.friend.ios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5o_gTTKLtURrt5BfAhwWYzQKHfidKnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746076934359-61a53iuumksuim5ue78g7t100227r9qs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friend.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746076934359:android:bb8229f1be7699fb74e092",
+        "android_client_info": {
+          "package_name": "com.friend.ios.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5o_gTTKLtURrt5BfAhwWYzQKHfidKnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746076934359-61a53iuumksuim5ue78g7t100227r9qs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friend.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746076934359:android:5bd7dcf8ba241e4774e092",
+        "android_client_info": {
+          "package_name": "plus.mylife.finance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5o_gTTKLtURrt5BfAhwWYzQKHfidKnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746076934359-61a53iuumksuim5ue78g7t100227r9qs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friend.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746076934359:android:f6c575d5303eac9e74e092",
+        "android_client_info": {
+          "package_name": "plus.mylife.todo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5o_gTTKLtURrt5BfAhwWYzQKHfidKnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746076934359-srplg8q1375bf351eint0bmata8u193u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746076934359-61a53iuumksuim5ue78g7t100227r9qs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friend.ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
