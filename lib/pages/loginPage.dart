@@ -71,6 +71,8 @@ class _LoginPageState extends State<LoginPage> {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
+
+
       );
 
       print("User signed up: ${userCredential.user?.email}");
