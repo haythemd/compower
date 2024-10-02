@@ -11,6 +11,7 @@ class Project{
   final String title;
   final String description;
   final String photoUrl;
+  
 
   Project({
     required this.id,
