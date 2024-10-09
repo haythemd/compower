@@ -1,86 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:todo/models/project.dart'; // Import the project model
+import 'package:todo/pages/Tasks/listTasks.dart';
+import 'package:todo/models/project.dart'; 
 
 class ProjectPage extends StatelessWidget {
-  final Project project; // Project data to display
+  final Project project;
 
   const ProjectPage({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfffff3d0), // Light yellow background
+      backgroundColor: const Color(0xfffff3d0),
       body: SafeArea(
-        child: SingleChildScrollView( // Added scroll view to prevent overflow
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0), // Global padding
+            padding: const EdgeInsets.all(0.8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Back button
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back),
                 ),
-                const SizedBox(height: 16), // Space between back button and content
-
-                // Project details (image, title, and description)
-                Row(
-                  children: [
-                    // Project image
-                    ClipOval(
-                      child: Image.network(
-                        project.photoUrl,
-                        width: 72,
-                        height: 72,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.error); // Error icon
-                        },
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      ClipOval(
+                        child: Image.network(
+                          project.photoUrl,
+                          width: 72,
+                          height: 72,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.error);
+                          },
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12), // Space between image and text
-                    
-                    // Project title and description
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            project.title,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'KumbhSans-Bold',
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              project.title,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'KumbhSans-Bold',
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4), // Space between title and description
-                          Text(
-                            project.description,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              fontFamily: 'KumbhSans-Regular',
+                            const SizedBox(height: 4),
+                            Text(
+                              project.description,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                                fontFamily: 'KumbhSans-Regular',
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 20), // Space between details and section list
-
-                // Section list
-                _buildSection(context, '✅', 'Tasks', project.tasks.length.toString()),
-                _buildSection(context, '👤', 'Members', project.members.length.toString()),
-                _buildSection(context, '🗳️', 'Voting', '3'),
-                _buildSection(context, '💡', 'Ideas', '3'), // New section for ideas
-                _buildSection(context, '💬', 'Forum', '4'),
-                _buildSection(context, '💵', 'Balance', '\$345'),
-                _buildSection(context, '📦', 'Inventory', '\$0'),
-                _buildSection(context, '⚙️', 'Settings', ''),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to the ListTasks screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ListTasksPage(tasks: project.tasks),
+                      ),
+                    );
+                  },
+                  child: _buildSection(context, Icons.check_box, 'Tasks', project.tasks.length.toString()),
+                ),
+                _buildSection(context, Icons.person, 'Members', project.members.length.toString()),
+                _buildSection(context, Icons.ballot, 'Voting', '3'),
+                _buildSection(context, Icons.lightbulb, 'Ideas', '3'),
+                _buildSection(context, Icons.forum, 'Forum', '4'),
+                _buildSection(context, Icons.money, 'Balance', '\$345'),
+                _buildSection(context, Icons.archive, 'Inventory', '\$0'),
+                _buildSection(context, Icons.settings, 'Settings', ''),
               ],
             ),
           ),
@@ -89,10 +100,11 @@ class ProjectPage extends StatelessWidget {
     );
   }
 
-  // Helper method to build each section
-  Widget _buildSection(BuildContext context, String emoji, String title, String value) {
+  Widget _buildSection(BuildContext context, IconData icon, String title, String value) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4), // Vertical space between sections
+      margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -104,8 +116,8 @@ class ProjectPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 24)), // Emoji icon
-              const SizedBox(width: 10),
+              Icon(icon, size: 24), // Use the icon passed in
+              const SizedBox(width: 8), // Space between icon and title
               Text(
                 title,
                 style: const TextStyle(
@@ -118,7 +130,7 @@ class ProjectPage extends StatelessWidget {
           ),
           Row(
             children: [
-              if (value.isNotEmpty) // Value (if present)
+              if (value.isNotEmpty)
                 Text(
                   value,
                   style: const TextStyle(
@@ -127,7 +139,7 @@ class ProjectPage extends StatelessWidget {
                   ),
                 ),
               const SizedBox(width: 10),
-              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey), // Arrow
+              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
             ],
           ),
         ],

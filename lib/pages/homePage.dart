@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo/pages/ProjectPage.dart';
-import 'package:todo/pages/new_project_screen.dart'; // Importing the screen for creating new projects
-import 'package:todo/models/project.dart'; // Importing the project model
-import 'package:todo/services/projectService.dart'; // Importing the service for project management
+import 'package:todo/pages/new_project_screen.dart'; 
+import 'package:todo/models/project.dart'; 
+import 'package:todo/services/projectService.dart'; 
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -14,34 +14,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final ProjectService _projectService = ProjectService(); // Instance of ProjectService to manage projects
+  final ProjectService _projectService = ProjectService(); 
 
-  String activeHeader = 'my Projects'; // Initial header to show
-
+  String activeHeader = 'my Projects'; 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    final screenHeight = MediaQuery.of(context).size.height; // Get screen height
+    final screenWidth = MediaQuery.of(context).size.width; 
+    final screenHeight = MediaQuery.of(context).size.height; 
 
     return Scaffold(
       body: Container(
         width: screenWidth,
         height: screenHeight,
-        decoration: const BoxDecoration(color: Color(0xFFFFF3D0)), // Background color
+        decoration: const BoxDecoration(color: Color(0xFFFFF3D0)),
         child: Column(
           children: [
-            SizedBox(height: screenHeight * 0.02), // Spacer
+            SizedBox(height: screenHeight * 0.02), 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Horizontal padding
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // First Header: My Projects
+                
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          activeHeader = 'my Projects'; // Update active header
+                          activeHeader = 'my Projects';
                         });
                       },
                       child: Column(
@@ -56,9 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          // Divider to show under the active header
                           if (activeHeader == 'my Projects')
-                            Container(
+                            SizedBox(
                               width: screenWidth * 0.20,
                               child: const Divider(
                                 color: Color(0xFFD9D9D9),
@@ -69,12 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  // Second Header: Explore
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          activeHeader = 'explore'; // Update active header
+                          activeHeader = 'explore'; 
                         });
                       },
                       child: Column(
@@ -89,9 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          // Divider to show under the active header
                           if (activeHeader == 'explore')
-                            Container(
+                            SizedBox(
                               width: screenWidth * 0.20,
                               child: const Divider(
                                 color: Color(0xFFD9D9D9),
@@ -102,47 +98,48 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  // Button to add new project
                   SizedBox(width: screenWidth * 0.02),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewProjectScreen(), // Navigate to new project screen
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      '+',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                 MouseRegion(
+                cursor: SystemMouseCursors.click, // Makes the cursor a pointer
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NewProjectScreen(),
                       ),
-                      textAlign: TextAlign.center,
+                    );
+                  },
+                  child: const Text(
+                    '+',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
+                    textAlign: TextAlign.center,
                   ),
+                ),
+              )
+
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.02), // Spacer
-            // StreamBuilder to display projects
+            SizedBox(height: screenHeight * 0.02), 
             Expanded(
               child: StreamBuilder<List<Project>>(
-                stream: _projectService.getAllProjects(), // Get all projects stream
+                stream: _projectService.getAllProjects(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator()); // Loading indicator
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error a: ${snapshot.error}')); // Error message
+                    return Center(child: Text('Error a: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No projects available.')); // No projects message
+                    return const Center(child: Text('No projects available.'));
                   }
 
-                  List<Project> projects = snapshot.data!; // Projects data
+                  List<Project> projects = snapshot.data!; 
 
-                  // Displaying projects in a list
                   return ListView.builder(
                     itemCount: projects.length,
                     itemBuilder: (context, index) {
@@ -152,13 +149,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.white,
                           child: ListTile(
                             leading: Image.network(
-                              projects[index].photoUrl, // Project image
+                              projects[index].photoUrl, 
                               width: 60,
                               height: 100,
                               
                               fit: BoxFit.cover,
                               loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child; // Show image if loaded
+                                if (loadingProgress == null) return child;
                                 return Center(
                                   child: CircularProgressIndicator(
                                     value: loadingProgress.expectedTotalBytes != null
@@ -168,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 );
                               },
                               errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.error); // Error icon if image fails to load
+                                return const Icon(Icons.error); 
                               },
                             ),
                             title: Text(
@@ -189,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.black), // Arrow icon
+                            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.black),
                             onTap: () {
           Navigator.push(
               context,

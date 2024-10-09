@@ -9,6 +9,8 @@ import 'dart:typed_data';
 import '../models/member.dart';
 
 class NewProjectScreen extends StatefulWidget {
+  const NewProjectScreen({super.key});
+
   @override
   _NewProjectScreenState createState() => _NewProjectScreenState();
 }
@@ -65,7 +67,7 @@ Future<String> _uploadImage(Uint8List imageData) async {
     return downloadUrl;
   } catch (e) {
     print('Error uploading image: $e');
-    throw e; // Re-throw the error for further handling
+    rethrow; // Re-throw the error for further handling
   }
 }
 
@@ -97,19 +99,19 @@ Future<String> _uploadImage(Uint8List imageData) async {
     return Scaffold(
       body: Container(
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(color: Color(0xFFFFF3D0)),
+        decoration: const BoxDecoration(color: Color(0xFFFFF3D0)),
         child: Stack(
           children: [
             Positioned(
               left: 5,
               top: 12,
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width - 10,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.black),
+                      icon: const Icon(Icons.arrow_back, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -125,7 +127,7 @@ Future<String> _uploadImage(Uint8List imageData) async {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.check, color: Colors.black),
+                      icon: const Icon(Icons.check, color: Colors.black),
                       onPressed: _addProject,
                     ),
                   ],
@@ -208,8 +210,8 @@ Future<String> _uploadImage(Uint8List imageData) async {
               ),
             ),
             if (_selectedImage != null) ...[
-              SizedBox(width: 10),
-              Icon(Icons.check_circle, color: Colors.green),
+              const SizedBox(width: 10),
+              const Icon(Icons.check_circle, color: Colors.green),
             ],
           ],
         ),
