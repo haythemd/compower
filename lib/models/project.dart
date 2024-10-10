@@ -7,6 +7,7 @@ part 'project.g.dart';
 
 @JsonSerializable()
 class Project {
+
   final int id;
   final String title;
   final String description;
@@ -14,7 +15,8 @@ class Project {
   final String location;         // Location of the project
   final String businessType;     // Type of business the project is related to
   final List<Member> members;    // List of members involved in the project
-  final List<ToDo> tasks;        // List of tasks (ToDos) associated with the project
+  final List<ToDo> tasks;
+  final Map<String,dynamic> metaData;// List of tasks (ToDos) associated with the project
 
   Project({
     required this.id,
@@ -24,7 +26,9 @@ class Project {
     required this.location,
     required this.businessType,
     required this.members,        // Initialize members
-    required this.tasks,          // Initialize tasks
+    required this.tasks,
+    required this.metaData,
+    // Initialize tasks
   });
 
   factory Project.fromJson(Map<String, dynamic> json) => _$ProjectFromJson(json);
@@ -47,6 +51,7 @@ class Project {
       businessType: doc['businessType'],
       members: membersFromJson,    // Deserialize members
       tasks: tasksFromJson,
+      metaData: {},
     );
   }
 

@@ -53,7 +53,7 @@ class ProjectService {
             .toList(),
         tasks: (docSnapshot['tasks'] as List<dynamic>)
             .map((task) => ToDo.fromJson(task as Map<String, dynamic>))
-            .toList(),
+            .toList(), metaData: {},
       );
     }
     return null;
@@ -75,7 +75,7 @@ class ProjectService {
                 .toList(),
             tasks: (doc['tasks'] as List<dynamic>)
                 .map((task) => ToDo.fromJson(task as Map<String, dynamic>))
-                .toList(),
+                .toList(), metaData: {},
           );
         }).toList());
   }

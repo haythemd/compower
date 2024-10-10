@@ -2,6 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/firebase_options.dart';
 import 'package:todo/pages/homePage.dart';
+import 'package:todo/pages/loginPage.dart';
+import 'package:todo/pages/onboardPage.dart';
+import 'package:todo/pages/projectsPage.dart';
+import 'package:todo/pages/registerPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +34,19 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: '',), // Set the home page
+      routes:
+  {
+    'home': (BuildContext)=> MyHomePage(title: 'ToDo',),
+    'login': (BuildContext)=> LoginPage(),
+    'onboard': (BuildContext)=> ProjectsPage(),
+    'register': (BuildContext)=> RegisterPage(),
+    'singleToDo': (BuildContext)=> MyHomePage(title: 'ToDo',),
+
+
+
+      },
+      initialRoute: 'onboard',
+      // Set the home page
     );
   }
 }

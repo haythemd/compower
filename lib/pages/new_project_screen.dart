@@ -87,7 +87,7 @@ Future<String> _uploadImage(Uint8List imageData) async {
       location: _locationController.text,
       businessType: _businessTypeController.text,
       members: _membersController.text.split(',').map((member) => Member(name: member.trim())).toList(),
-      tasks: [],
+      tasks: [], metaData: {},
     );
 
     await ProjectService().addProject(project);

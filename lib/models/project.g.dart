@@ -19,6 +19,7 @@ Project _$ProjectFromJson(Map<String, dynamic> json) => Project(
       tasks: (json['tasks'] as List<dynamic>)
           .map((e) => ToDo.fromJson(e as Map<String, dynamic>))
           .toList(),
+      metaData: json['metaData'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
@@ -30,4 +31,5 @@ Map<String, dynamic> _$ProjectToJson(Project instance) => <String, dynamic>{
       'businessType': instance.businessType,
       'members': instance.members,
       'tasks': instance.tasks,
+      'metaData': instance.metaData,
     };

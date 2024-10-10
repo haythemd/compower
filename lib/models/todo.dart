@@ -8,20 +8,22 @@ class ToDo {
   final String title;
   final String? description; // Nullable description
   final double price;
+  final DateTime? startDate;
+  final DateTime? dueDate;
   final bool isDone;
-  final int index;
+  final String index;
   final int groupId;
-  final DateTime? dueDate; // Nullable due date
   final String? duration; // Duration as a String
-  final bool? inventory; // Inventory count
+  final Map<String,dynamic>? inventory; // Inventory count
   final String? dependency; // Added correct field
   final String? assignedMember; // Added correct field
 
-  ToDo({
+  ToDo( {
     required this.id,
     required this.title,
     this.description, // Optional description
     required this.price,
+    this.startDate,
     required this.isDone,
     required this.index,
     required this.groupId,

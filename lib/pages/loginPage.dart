@@ -116,7 +116,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: Colors.blue,
+            color: Colors.white,
+            boxShadow: [BoxShadow(color: Colors.grey, spreadRadius: 2, blurRadius: 9)]
+
           ),
           height: 800,
           width: 500,
@@ -137,14 +139,9 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: _isLoading ? null : _signIn,
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Sign In"),
+                    : const Text("Login"),
               ),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _signUp, 
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Sign Up"),
-              ),
+
             ],
           ),
         ),
