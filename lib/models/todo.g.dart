@@ -15,7 +15,7 @@ ToDo _$ToDoFromJson(Map<String, dynamic> json) => ToDo(
           ? null
           : DateTime.parse(json['startDate'] as String),
       isDone: json['isDone'] as bool,
-      index: json['index'] as String,
+      index: (json['index'] as num).toInt(),
       groupId: (json['groupId'] as num).toInt(),
       dueDate: json['dueDate'] == null
           ? null

@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
 
 
       },
-      initialRoute: 'onboard',
+      initialRoute: 'home',
       // Set the home page
     );
   }

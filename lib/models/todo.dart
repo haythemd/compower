@@ -11,7 +11,7 @@ class ToDo {
   final DateTime? startDate;
   final DateTime? dueDate;
   final bool isDone;
-  final String index;
+  final int index;
   final int groupId;
   final String? duration; // Duration as a String
   final Map<String,dynamic>? inventory; // Inventory count
