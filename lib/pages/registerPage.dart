@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../services/userService.dart'; // Import UserService
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -10,9 +11,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _displayNameController = TextEditingController(); // New controller for displayName
 
   // Firebase Auth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final UserService _userService = UserService(); // Create instance of UserService
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -32,16 +35,21 @@ class _RegisterPageState extends State<RegisterPage> {
           password: _passwordController.text.trim(),
         );
 
-        // If successful, navigate to another page or show a success message
+        // After successful registration, create a user in Firestore using UserService
+        await _userService.createOrUpdateUser(
+          uid: userCredential.user!.uid,
+          email: userCredential.user!.email!,
+          displayName: _displayNameController.text.trim(),
+        );
+
+        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Registration successful')),
         );
 
-       await Navigator.of(context).pushReplacementNamed('home');
+        // Navigate to home page
+        await Navigator.of(context).pushReplacementNamed('home');
 
-
-
-        // You can redirect the user to another page here
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           setState(() {
@@ -79,6 +87,17 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              TextFormField(
+                controller: _displayNameController,
+                decoration: InputDecoration(labelText: 'Display Name'), // New field for displayName
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your display name';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16.0),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: 'Email'),

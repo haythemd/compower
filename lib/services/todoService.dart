@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todo/services/projectService.dart';
+import '../models/todo.dart';
 
 class TodoService {
   // Singleton instance
@@ -9,21 +11,30 @@ class TodoService {
   // Firestore collection reference
   final CollectionReference _todoCollection =
   FirebaseFirestore.instance.collection('todos');
+  final CollectionReference projectCollection =
+  FirebaseFirestore.instance.collection('projects');
+
+  final ProjectService _projectService = ProjectService();
 
   // Create a new ToDo
   Future<void> createTodo(ToDo todo) async {
     try {
-      await _todoCollection.add({
-        'id': todo.id,
+      DocumentReference todoRef = await _todoCollection.add({
+        'projectId': todo.projectId,
         'title': todo.title,
         'description': todo.description,
         'price': todo.price,
-        'dueDate': todo.dueDate,
+        'startDate': todo.startDate != null ? Timestamp.fromDate(todo.startDate!) : null,
+        'dueDate': todo.dueDate != null ? Timestamp.fromDate(todo.dueDate!) : null,
         'isDone': todo.isDone,
         'index': todo.index,
-        'predecessor': todo.predecessor,
         'groupId': todo.groupId,
+        'duration': todo.duration,
+        'inventory': todo.inventory,
+        'dependency': todo.dependency,
+        'assignedMember': todo.assignedMember,
       });
+      await _projectService.addTodoToProject(todo.projectId, todoRef);
     } catch (e) {
       print('Error creating ToDo: $e');
     }
@@ -35,15 +46,58 @@ class TodoService {
       QuerySnapshot querySnapshot = await _todoCollection.get();
       return querySnapshot.docs.map((doc) {
         return ToDo(
-          id: doc['id'],
+          id: doc.reference,
+          projectId: doc['projectId'],
           title: doc['title'],
           description: doc['description'],
-          price: doc['price'],
-          dueDate: doc['dueDate'],
+          price: (doc['price'] as num).toDouble(),
+          startDate: (doc['startDate'] as Timestamp?)?.toDate(),
+          dueDate: (doc['dueDate'] as Timestamp?)?.toDate(),
           isDone: doc['isDone'],
           index: doc['index'],
-          predecessor: doc['predecessor'],
           groupId: doc['groupId'],
+          duration: doc['duration'],
+          inventory: doc['inventory'] != null
+              ? Map<String, dynamic>.from(doc['inventory'])
+              : null,
+          dependency: doc['dependency'],
+          assignedMember: doc['assignedMember'],
+        );
+      }).toList();
+    } catch (e) {
+      print('Error reading ToDos: $e');
+      return [];
+    }
+  }
+
+  Future<List<ToDo>> getTodosByProjectId(String projectId) async {
+
+    print(projectId);
+    try {
+
+      QuerySnapshot querySnapshot = await _todoCollection
+          .where('projectId', isEqualTo: projectCollection.doc(projectId))
+          .get();
+
+      print(querySnapshot.docs.length);
+      return querySnapshot.docs.map((doc) {
+        return ToDo(
+          id: doc.reference,
+          projectId: doc['projectId'],
+          title: doc['title'],
+          description: doc['description'],
+          price: (doc['price'] as num).toDouble(),
+          startDate: (doc['startDate'] as Timestamp?)?.toDate(),
+          dueDate: (doc['dueDate'] as Timestamp?)?.toDate(),
+          isDone: doc['isDone'],
+          index: doc['index'],
+          groupId: doc['groupId'],
+          duration: doc['duration'],
+          inventory: doc['inventory'] != null
+              ? Map<String, dynamic>.from(doc['inventory'])
+              : null,
+          dependency: doc['dependency'],
+          assignedMember: doc['assignedMember'],
         );
       }).toList();
     } catch (e) {
@@ -59,11 +113,15 @@ class TodoService {
         'title': updatedTodo.title,
         'description': updatedTodo.description,
         'price': updatedTodo.price,
-        'dueDate': updatedTodo.dueDate,
+        'startDate': updatedTodo.startDate != null ? Timestamp.fromDate(updatedTodo.startDate!) : null,
+        'dueDate': updatedTodo.dueDate != null ? Timestamp.fromDate(updatedTodo.dueDate!) : null,
         'isDone': updatedTodo.isDone,
         'index': updatedTodo.index,
-        'predecessor': updatedTodo.predecessor,
         'groupId': updatedTodo.groupId,
+        'duration': updatedTodo.duration,
+        'inventory': updatedTodo.inventory,
+        'dependency': updatedTodo.dependency,
+        'assignedMember': updatedTodo.assignedMember,
       });
     } catch (e) {
       print('Error updating ToDo: $e');
@@ -71,35 +129,13 @@ class TodoService {
   }
 
   // Delete a ToDo
-  Future<void> deleteTodo(String docId) async {
+  Future<void> deleteTodo(String docId, DocumentReference projectId) async {
     try {
-      await _todoCollection.doc(docId).delete();
+      DocumentReference todoRef = _todoCollection.doc(docId);
+      await todoRef.delete();
+      await _projectService.removeTodoFromProject(projectId, todoRef);
     } catch (e) {
       print('Error deleting ToDo: $e');
     }
   }
-}
-
-class ToDo {
-  final int id;
-  final String title;
-  final String description;
-  final double price;
-  final DateTime dueDate;
-  final bool isDone;
-  final int index;
-  final DocumentReference predecessor;
-  final int groupId;
-
-  ToDo({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.dueDate,
-    required this.isDone,
-    required this.index,
-    required this.predecessor,
-    required this.groupId,
-  });
 }

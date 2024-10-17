@@ -25,6 +25,8 @@ class ProjectsPage extends StatelessWidget {
           // Fetching the projects from Firestore
           final projects = snapshot.data!.docs;
 
+          print(projects[0].reference.toString());
+          print(projects[0].id);
           return ListView.builder(
             itemCount: projects.length,
             itemBuilder: (context, index) {
@@ -33,8 +35,13 @@ class ProjectsPage extends StatelessWidget {
               String description = project['description'];
               String imageUrl = project['photoUrl'];
 
+              print(project.reference.toString());
+              print(project.id);
               return GestureDetector(
                 onTap: () {
+
+                  print(project.reference.toString());
+                  print(project.id);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -55,6 +62,7 @@ class ProjectsPage extends StatelessWidget {
                         : Icon(Icons.image, size: 50),
                     title: Text(title),
                     subtitle: Text(description, maxLines: 2, overflow: TextOverflow.ellipsis),
+                    trailing: Text(project.id, style: TextStyle(color: Colors.amber),),
                   ),
                 ),
               );

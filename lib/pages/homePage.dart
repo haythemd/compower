@@ -1,213 +1,130 @@
 import 'package:flutter/material.dart';
-import 'package:todo/pages/ProjectPage.dart';
-import 'package:todo/pages/new_project_screen.dart'; // Importing the screen for creating new projects
-import 'package:todo/models/project.dart'; // Importing the project model
-import 'package:todo/services/projectService.dart'; // Importing the service for project management
+import '../models/project.dart';
+import '../services/projectService.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
+class ProjectsListPage extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _ProjectsListPageState createState() => _ProjectsListPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final ProjectService _projectService = ProjectService(); // Instance of ProjectService to manage projects
-
-  String activeHeader = 'my Projects'; // Initial header to show
+class _ProjectsListPageState extends State<ProjectsListPage> {
+  final ProjectService _projectService = ProjectService();
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    final screenHeight = MediaQuery.of(context).size.height; // Get screen height
-
     return Scaffold(
-      body: Container(
-        width: screenWidth,
-        height: screenHeight,
-        decoration: const BoxDecoration(color: Color(0xFFFFF3D0)), // Background color
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.02), // Spacer
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Horizontal padding
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // First Header: My Projects
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          activeHeader = 'my Projects'; // Update active header
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          const Text(
-                            'my Projects',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          // Divider to show under the active header
-                          if (activeHeader == 'my Projects')
-                            Container(
-                              width: screenWidth * 0.20,
-                              child: const Divider(
-                                color: Color(0xFFD9D9D9),
-                                thickness: 2,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // Second Header: Explore
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          activeHeader = 'explore'; // Update active header
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          const Text(
-                            'explore',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          // Divider to show under the active header
-                          if (activeHeader == 'explore')
-                            Container(
-                              width: screenWidth * 0.20,
-                              child: const Divider(
-                                color: Color(0xFFD9D9D9),
-                                thickness: 2,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // Button to add new project
-                  SizedBox(width: screenWidth * 0.02),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewProjectScreen(), // Navigate to new project screen
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      '+',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.02), // Spacer
-            // StreamBuilder to display projects
-            Expanded(
-              child: StreamBuilder<List<Project>>(
-                stream: _projectService.getAllProjects(), // Get all projects stream
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator()); // Loading indicator
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error a: ${snapshot.error}')); // Error message
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No projects available.')); // No projects message
-                  }
+      appBar: AppBar(
+        title: Text('Projects'),
+      ),
+      body: StreamBuilder<List<Project>>(
+        stream: _projectService.getAllProjects(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No projects available'));
+          }
 
-                  List<Project> projects = snapshot.data!; // Projects data
+          final projects = snapshot.data!;
 
-                  // Displaying projects in a list
-                  return ListView.builder(
-                    itemCount: projects.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Container(
-                          color: Colors.white,
-                          child: ListTile(
-                            leading: Image.network(
-                              projects[index].photoUrl, // Project image
-                              width: 60,
-                              height: 100,
-                              
-                              fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child; // Show image if loaded
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                                        : null,
-                                  ),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.error); // Error icon if image fails to load
-                              },
-                            ),
-                            title: Text(
-                              projects[index].title,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontFamily: 'Kumbh Sans',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            subtitle: Text(
-                              projects[index].description,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontFamily: 'Kumbh Sans',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            trailing: const Icon(Icons.arrow_forward_ios, color: Colors.black), // Arrow icon
-                            onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProjectPage(project: projects[index]),
-              ),
-            );                            },
-                          ),
-                        ),
-                      );
-                    },
+          return ListView.builder(
+            itemCount: projects.length,
+            itemBuilder: (context, index) {
+              final project = projects[index];
+              return ListTile(
+                title: Text(project.title),
+                subtitle: Text(project.description),
+                leading: project.photoUrl.isNotEmpty
+                    ? Image.network(project.photoUrl, width: 50, height: 50, fit: BoxFit.cover)
+                    : Icon(Icons.image),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    'project',
+                    arguments: project,
                   );
                 },
-              ),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddProjectDialog(),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showAddProjectDialog() {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController descriptionController = TextEditingController();
+    final TextEditingController locationController = TextEditingController();
+    final TextEditingController businessTypeController = TextEditingController();
+    final TextEditingController photoUrlController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add New Project'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(labelText: 'Title'),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(labelText: 'Description'),
+                ),
+                TextField(
+                  controller: locationController,
+                  decoration: InputDecoration(labelText: 'Location'),
+                ),
+                TextField(
+                  controller: businessTypeController,
+                  decoration: InputDecoration(labelText: 'Business Type'),
+                ),
+                TextField(
+                  controller: photoUrlController,
+                  decoration: InputDecoration(labelText: 'Photo URL'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Since members and tasks are now DocumentReferences, we'll keep them empty for now
+                final project = Project(
+                  id: '', // Firestore will generate the ID
+                  title: titleController.text,
+                  description: descriptionController.text,
+                  photoUrl: photoUrlController.text,
+                  location: locationController.text,
+                  businessType: businessTypeController.text,
+                  members: [], // Empty for now, assuming members will be added later
+                  tasks: [],   // Empty for now, assuming tasks will be added later
+                  metaData: {}, // Empty metaData
+                );
+                await _projectService.addProject(project);
+                Navigator.of(context).pop();
+              },
+              child: Text('Add'),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

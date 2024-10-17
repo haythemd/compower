@@ -1,22 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'todo.dart';  // Import the ToDo model here
-import 'member.dart'; // Import the Member model here
 
-part 'project.g.dart';
-
-@JsonSerializable()
 class Project {
-
-  final int id;
+  final String id;
   final String title;
   final String description;
   final String photoUrl;
   final String location;         // Location of the project
   final String businessType;     // Type of business the project is related to
-  final List<Member> members;    // List of members involved in the project
-  final List<ToDo> tasks;
-  final Map<String,dynamic> metaData;// List of tasks (ToDos) associated with the project
+  final List<DocumentReference> members;    // List of members involved in the project
+  final List<DocumentReference> tasks;      // List of tasks (ToDos) associated with the project
+  final Map<String, dynamic> metaData;      // Meta data for the project
 
   Project({
     required this.id,
@@ -28,18 +21,16 @@ class Project {
     required this.members,        // Initialize members
     required this.tasks,
     required this.metaData,
-    // Initialize tasks
   });
 
-  factory Project.fromJson(Map<String, dynamic> json) => _$ProjectFromJson(json);
 
   factory Project.fromDocument(DocumentSnapshot doc) {
     var tasksFromJson = (doc['tasks'] as List)
-        .map((task) => ToDo.fromJson(task as Map<String, dynamic>))
+        .map((task) => task as DocumentReference)
         .toList();
 
     var membersFromJson = (doc['members'] as List)
-        .map((member) => Member.fromJson(member as Map<String, dynamic>))
+        .map((member) => member as DocumentReference)
         .toList();
 
     return Project(
@@ -49,11 +40,10 @@ class Project {
       photoUrl: doc['photoUrl'],
       location: doc['location'],
       businessType: doc['businessType'],
-      members: membersFromJson,    // Deserialize members
-      tasks: tasksFromJson,
-      metaData: {},
+      members: membersFromJson,    // Deserialize members as DocumentReference
+      tasks: tasksFromJson,        // Deserialize tasks as DocumentReference
+      metaData: doc['metaData'] as Map<String, dynamic>,
     );
   }
 
-  Map<String, dynamic> toJson() => _$ProjectToJson(this);
 }

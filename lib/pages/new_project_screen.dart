@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/models/project.dart';
@@ -6,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:typed_data';
 
-import '../models/member.dart';
 
 class NewProjectScreen extends StatefulWidget {
   const NewProjectScreen({super.key});
@@ -80,13 +80,13 @@ Future<String> _uploadImage(Uint8List imageData) async {
     }
 
     final project = Project(
-      id: DateTime.now().millisecondsSinceEpoch,
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _nameController.text,
       description: _descriptionController.text,
       photoUrl: imageUrl,
       location: _locationController.text,
       businessType: _businessTypeController.text,
-      members: _membersController.text.split(',').map((member) => Member(name: member.trim())).toList(),
+      members: _membersController.text.split(',').map((member) => FirebaseFirestore.instance.doc('members/'+member.trim())).toList(),
       tasks: [], metaData: {},
     );
 
