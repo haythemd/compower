@@ -44,9 +44,9 @@ class MyApp extends StatelessWidget {
       routes:
   {
     'home': (BuildContext)=> ProjectsListPage(),
-    'login': (BuildContext)=> LoginPage(),
+    'login': (BuildContext)=> const LoginPage(),
     'register': (BuildContext)=> RegisterPage(),
-    'newProject': (BuildContext)=> NewProjectScreen(),
+    'newProject': (BuildContext)=> const NewProjectScreen(),
     'projects': (BuildContext)=> ProjectsPage(),
     'onboard': (BuildContext)=> AuthWrapper(),
     'addTask': (BuildContext)=> AddTaskPage(),

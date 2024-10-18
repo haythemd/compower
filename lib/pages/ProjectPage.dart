@@ -164,7 +164,7 @@ class ProjectSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Project Settings'),
+        title: const Text('Project Settings'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -189,16 +189,16 @@ class ProjectSettingsPage extends StatelessWidget {
                   ),
                 ));
               },
-              child: Text('Edit Project'),
+              child: const Text('Edit Project'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () async {
                 await _projectService.deleteProject(project.id);
                 Navigator.of(context).pop();
               },
-              child: Text('Delete Project'),
+              child: const Text('Delete Project'),
             ),
           ],
         ),
@@ -230,7 +230,7 @@ class EditProjectPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Project'),
+        title: const Text('Edit Project'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -239,25 +239,25 @@ class EditProjectPage extends StatelessWidget {
             children: [
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
               ),
               TextField(
                 controller: locationController,
-                decoration: InputDecoration(labelText: 'Location'),
+                decoration: const InputDecoration(labelText: 'Location'),
               ),
               TextField(
                 controller: businessTypeController,
-                decoration: InputDecoration(labelText: 'Business Type'),
+                decoration: const InputDecoration(labelText: 'Business Type'),
               ),
               TextField(
                 controller: photoUrlController,
-                decoration: InputDecoration(labelText: 'Photo URL'),
+                decoration: const InputDecoration(labelText: 'Photo URL'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   final updatedProject = Project(
@@ -274,7 +274,7 @@ class EditProjectPage extends StatelessWidget {
                   await _projectService.updateProject(project.id, updatedProject);
                   Navigator.of(context).pop();
                 },
-                child: Text('Save Changes'),
+                child: const Text('Save Changes'),
               ),
             ],
           ),

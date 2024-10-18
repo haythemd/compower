@@ -6,20 +6,22 @@ import 'new_project_screen.dart';
 class ProjectsPage extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+   ProjectsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Projects'),
+        title: const Text('Projects'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('projects').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No projects found.'));
+            return const Center(child: Text('No projects found.'));
           }
 
           // Fetching the projects from Firestore
@@ -55,14 +57,14 @@ class ProjectsPage extends StatelessWidget {
                   );
                 },
                 child: Card(
-                  margin: EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.all(8.0),
                   child: ListTile(
                     leading: imageUrl.isNotEmpty
                         ? Image.network(imageUrl, width: 50, height: 50, fit: BoxFit.cover)
-                        : Icon(Icons.image, size: 50),
+                        : const Icon(Icons.image, size: 50),
                     title: Text(title),
                     subtitle: Text(description, maxLines: 2, overflow: TextOverflow.ellipsis),
-                    trailing: Text(project.id, style: TextStyle(color: Colors.amber),),
+                    trailing: Text(project.id, style: const TextStyle(color: Colors.amber),),
                   ),
                 ),
               );
@@ -74,10 +76,10 @@ class ProjectsPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewProjectScreen()),
+            MaterialPageRoute(builder: (context) => const NewProjectScreen()),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -90,7 +92,7 @@ class SingleProjectPage extends StatelessWidget {
   final String description;
   final String imageUrl;
 
-  SingleProjectPage({
+  const SingleProjectPage({super.key, 
     required this.projectId,
     required this.title,
     required this.description,
@@ -111,14 +113,14 @@ class SingleProjectPage extends StatelessWidget {
                 : Container(
               height: 200,
               color: Colors.grey[300],
-              child: Icon(Icons.image, size: 100),
+              child: const Icon(Icons.image, size: 100),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text(
               title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(description),
           ],
         ),
@@ -129,13 +131,15 @@ class SingleProjectPage extends StatelessWidget {
 
 // Placeholder for AddNewProjectPage
 class AddNewProjectPage extends StatelessWidget {
+  const AddNewProjectPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Project'),
+        title: const Text('Add New Project'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Add New Project Page - Implement Form here'),
       ),
     );

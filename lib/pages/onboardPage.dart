@@ -4,10 +4,12 @@ import 'package:todo/pages/registerPage.dart';
 import 'loginPage.dart';
 
 class OnboardingPage extends StatelessWidget {
+  const OnboardingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      drawer: const Drawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -53,10 +55,10 @@ class OnboardingPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const LoginPage()),
                     );
                   },
-                  child: const Text('Login'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                   ),
+                  child: const Text('Login'),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -69,10 +71,10 @@ class OnboardingPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => RegisterPage()),
                     );
                   },
-                  child: const Text('Register'),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0), backgroundColor: Colors.blue[500], // Different color for distinction
                   ),
+                  child: const Text('Register'),
                 ),
               ),
             ],

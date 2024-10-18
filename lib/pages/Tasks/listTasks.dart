@@ -3,15 +3,19 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:todo/pages/Tasks/TimePickerExample.dart';
 import 'package:todo/services/projectService.dart';
 import '../../models/project.dart';
 import '../../models/todo.dart';
 import '../../services/todoService.dart';
+import 'package:flutter/cupertino.dart';
+
 
 class ListTasksPage extends StatefulWidget {
   final Project project;
 
-  const ListTasksPage({Key? key, required this.project}) : super(key: key);
+  const ListTasksPage({super.key, required this.project});
 
   @override
   State<ListTasksPage> createState() => _ListTasksPageState();
@@ -40,9 +44,10 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tasks'),
+        title: const Text('Tasks'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -60,7 +65,7 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddTaskModal(context),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -70,13 +75,13 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
       future: _todoService.getTodosByProjectId(widget.project.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No tasks available'));
+          return const Center(child: Text('No tasks available'));
         }
 
         final myTasks = snapshot.data!
@@ -107,13 +112,13 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
       future: Future.wait([...widget.project.tasks.map((e) => e.get())]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
         if (!snapshot.hasData || snapshot.data == null) {
-          return Center(child: Text('No tasks available'));
+          return const Center(child: Text('No tasks available'));
         }
 
         final tasks = [...snapshot.data!.map((e) => ToDo.fromFirebase(e))];
@@ -145,7 +150,7 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
@@ -159,18 +164,18 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Edit Task', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                SizedBox(height: 16),
+                const Text('Edit Task', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 16),
                 TextField(
                   controller: titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: const InputDecoration(labelText: 'Title'),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextField(
                   controller: descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: const InputDecoration(labelText: 'Description'),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Checkbox(
@@ -181,10 +186,10 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
                         });
                       },
                     ),
-                    Text('Completed')
+                    const Text('Completed')
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
                     final updatedTitle = titleController.text.trim();
@@ -204,7 +209,7 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
                       Navigator.pop(context);
                     }
                   },
-                  child: Text('Confirm'),
+                  child: const Text('Confirm'),
                 ),
               ],
             ),
@@ -214,160 +219,204 @@ class _ListTasksPageState extends State<ListTasksPage> with SingleTickerProvider
     );
   }
 
-  void _openAddTaskModal(BuildContext context) async {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController descriptionController = TextEditingController();
-    final TextEditingController priceController = TextEditingController();
-    final TextEditingController startDateController = TextEditingController();
-    final TextEditingController dueDateController = TextEditingController();
-    final TextEditingController durationController = TextEditingController();
-    final TextEditingController inventoryController = TextEditingController();
+void _openAddTaskModal(BuildContext context) async {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController startDateController = TextEditingController();
+  final TextEditingController dueDateController = TextEditingController();
+  final TextEditingController durationController = TextEditingController();
+  final TextEditingController inventoryController = TextEditingController();
 
-    // Fetch users from Firebase
-    List<DocumentSnapshot> users = await FirebaseFirestore.instance.collection('users').get().then((snapshot) => snapshot.docs);
+  DocumentReference? selectedAssignedMember;
+  DocumentReference? selectedDependency;
+  DocumentSnapshot? selectedTask;
 
-    // Fetch tasks for dependencies
+  // Fetch users from Firebase
+  List<DocumentSnapshot> users = await FirebaseFirestore.instance.collection('users').get().then((snapshot) => snapshot.docs);
+  // Fetch tasks for dependencies
+  List<DocumentSnapshot> tasks = await FirebaseFirestore.instance.collection('todos').get().then((snapshot) => snapshot.docs);
 
-    DocumentReference? selectedAssignedMember;
-    DocumentReference? selectedDependency;
-
-    showModalBottomSheet(
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    DateTime? picked = await showDatePicker(
       context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Add New Task', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                SizedBox(height: 16),
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.number,
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: startDateController,
-                  decoration: InputDecoration(labelText: 'Start Date (YYYY-MM-DD)'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: dueDateController,
-                  decoration: InputDecoration(labelText: 'Due Date (YYYY-MM-DD)'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: durationController,
-                  decoration: InputDecoration(labelText: 'Duration'),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  controller: inventoryController,
-                  decoration: InputDecoration(labelText: 'Inventory (JSON format)'),
-                ),
-                SizedBox(height: 8),
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        controller.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
 
-                // Assigned Member Selection
-                DropdownButton<DocumentSnapshot>(
-                  hint: Text('Select Assigned Member'),
-                  value: null,
-                  onChanged: (DocumentSnapshot? newUser) {
-                    selectedAssignedMember = newUser?.reference;
-                  },
-                  items: users.map((DocumentSnapshot user) {
-                    return DropdownMenuItem<DocumentSnapshot>(
-                      value: user,
-                      child: Text(user['displayName']), // Assuming the user document has a 'name' field
-                    );
-                  }).toList(),
-                ),
-
-                // Dependency Task Selection
-                DropdownButton<DocumentSnapshot>(
-                  hint: Text('Select Dependency Task'),
-                  value: null,
-                  onChanged: (DocumentSnapshot? task) {
-                    selectedDependency = task?.reference;
-                  },
-                  items: users.map((DocumentSnapshot user) {
-                    return DropdownMenuItem<DocumentSnapshot>(
-                      value: user,
-                      child: Text(user['displayName']), // Assuming the user document has a 'name' field
-                    );
-                  }).toList(),
-                ),
-
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    final title = titleController.text.trim();
-                    final description = descriptionController.text.trim();
-                    final price = double.tryParse(priceController.text.trim()) ?? 0.0;
-                    final startDate = startDateController.text.trim().isEmpty ? null : DateTime.parse(startDateController.text.trim());
-                    final dueDate = dueDateController.text.trim().isEmpty ? null : DateTime.parse(dueDateController.text.trim());
-                    final duration = durationController.text.trim();
-
-                    Map<String, dynamic>? inventory;
-                    if (inventoryController.text.isNotEmpty) {
-                      try {
-                        inventory = jsonDecode(inventoryController.text);
-                      } catch (e) {
-                        inventory = null;
-                      }
-                    }
-
-                    if (title.isNotEmpty) {
-                      try {
-                        await _todoService.createTodo(ToDo(
-                          id: null,
-                          projectId: _todoService.projectCollection.doc(widget.project.id),
-                          title: title,
-                          description: description.isEmpty ? null : description,
-                          price: price,
-                          isDone: false,
-                          index: null,
-                          groupId: null,
-                          startDate: startDate,
-                          dueDate: dueDate,
-                          duration: duration.isEmpty ? null : duration,
-                          inventory: inventory,
-                          dependency: selectedDependency,
-                          assignedMember: selectedAssignedMember,
-                        ));
-                      } catch (e) {
-                        print(e);
-                      }
-
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text('Add Task'),
-                ),
-              ],
-            ),
-          ),
-        );
+  void _showDurationPicker(BuildContext context) async {
+    final Duration? pickedDuration = await showModalBottomSheet<Duration>(
+      context: context,
+      builder: (context) {
+        return DurationPicker(); 
       },
     );
+
+    if (pickedDuration != null) {
+      durationController.text = pickedDuration.inHours > 0
+          ? '${pickedDuration.inHours}h ${pickedDuration.inMinutes % 60}m'
+          : '${pickedDuration.inMinutes}m';
+    }
   }
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+    ),
+    builder: (BuildContext context) {
+      return Padding(
+        padding: EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Add New Task', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(labelText: 'Title'),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: 'Description'),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: priceController,
+                decoration: const InputDecoration(labelText: 'Price'),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: startDateController,
+                decoration: const InputDecoration(labelText: 'Start Date'),
+                readOnly: true,
+                onTap: () => _selectDate(context, startDateController),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: dueDateController,
+                decoration: const InputDecoration(labelText: 'Due Date'),
+                readOnly: true,
+                onTap: () => _selectDate(context, dueDateController),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: durationController,
+                decoration: const InputDecoration(labelText: 'Duration'),
+                readOnly: true,
+                onTap: () => _showDurationPicker(context),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: inventoryController,
+                decoration: const InputDecoration(labelText: 'Inventory (JSON format)'),
+              ),
+              const SizedBox(height: 8),
+
+              DropdownButton<DocumentSnapshot>(
+                hint: const Text('Select Assigned Member'),
+                value: selectedAssignedMember != null ? users.firstWhere((user) => user.reference == selectedAssignedMember) : null,
+                onChanged: (DocumentSnapshot? newUser) {
+                  setState(() {
+                    selectedAssignedMember = newUser?.reference;
+                  });
+                },
+                items: users.map((DocumentSnapshot user) {
+                  return DropdownMenuItem<DocumentSnapshot>(
+                    value: user,
+                    child: Text(user['displayName']), 
+                  );
+                }).toList(),
+              ),
+
+              DropdownButton<DocumentSnapshot>(
+                hint: selectedTask != null ? Text(selectedTask!['title']) : const Text('Select Dependency Task'),
+                value: selectedTask,
+                onChanged: (DocumentSnapshot? newTask) {
+                  setState(() {
+                    if (newTask != null) {
+                      selectedDependency = newTask.reference;
+                      selectedTask = newTask;
+                    } else {
+                      selectedTask = null; 
+                    }
+                  });
+                  print('Selected Dependency Task: ${selectedTask != null ? selectedTask!['title'] : 'None'}');
+                },
+                items: tasks.map((DocumentSnapshot task) {
+                  return DropdownMenuItem<DocumentSnapshot>(
+                    value: task,
+                    child: Text(task['title']),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  final title = titleController.text.trim();
+                  final description = descriptionController.text.trim();
+                  final price = double.tryParse(priceController.text.trim()) ?? 0.0;
+                  final startDate = startDateController.text.trim().isEmpty ? null : DateTime.parse(startDateController.text.trim());
+                  final dueDate = dueDateController.text.trim().isEmpty ? null : DateTime.parse(dueDateController.text.trim());
+                  final duration = durationController.text.trim();
+
+                  Map<String, dynamic>? inventory;
+                  if (inventoryController.text.isNotEmpty) {
+                    try {
+                      inventory = jsonDecode(inventoryController.text);
+                    } catch (e) {
+                      inventory = null;
+                    }
+                  }
+
+                  if (title.isNotEmpty) {
+                    try {
+                      await _todoService.createTodo(ToDo(
+                        id: null,
+                        projectId: _todoService.projectCollection.doc(widget.project.id),
+                        title: title,
+                        description: description.isEmpty ? null : description,
+                        price: price,
+                        isDone: false,
+                        index: null,
+                        groupId: null,
+                        startDate: startDate,
+                        dueDate: dueDate,
+                        duration: duration.isEmpty ? null : duration,
+                        inventory: inventory,
+                        dependency: selectedDependency,
+                        assignedMember: selectedAssignedMember,
+                      ));
+                    } catch (e) {
+                      print(e);
+                    }
+
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Add Task'),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 }
