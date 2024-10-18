@@ -36,7 +36,7 @@ class _ProjectspageState extends State<Projectspage> {
       stream: _projectService.getAllProjects(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
+          return const Scaffold(
             body: Center(child: CircularProgressIndicator()), // Loading state
           );
         } else if (snapshot.hasError) {
@@ -44,7 +44,7 @@ class _ProjectspageState extends State<Projectspage> {
             body: Center(child: Text('Error: ${snapshot.error}')), // Error state
           );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Scaffold(
+          return const Scaffold(
             body: Center(child: Text('No projects available')), // No data state
           );
         }
@@ -64,7 +64,7 @@ class _ProjectspageState extends State<Projectspage> {
                     Container(
                       child: Column(
                         children: [
-                          SizedBox(height: 40),
+                          const SizedBox(height: 40),
                           ...snapshot.data!.map((project) => InkWell(
                             onTap: () {
                               setState(() {
@@ -72,13 +72,13 @@ class _ProjectspageState extends State<Projectspage> {
                               });
                             },
                             child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
+                              margin: const EdgeInsets.symmetric(vertical: 12),
                               width: 40,
                               height: 40,
                               child: ClipOval(
                                 child: project.photoUrl.isNotEmpty
                                     ? Image.network(project.photoUrl, fit: BoxFit.cover)
-                                    : Icon(Icons.image),
+                                    : const Icon(Icons.image),
                               ),
                             ),
                           )),
@@ -92,7 +92,7 @@ class _ProjectspageState extends State<Projectspage> {
                         onPressed: () async {
                           await openModal(context);
                         },
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                       ),
                     )
                   ],
@@ -107,7 +107,7 @@ class _ProjectspageState extends State<Projectspage> {
                       _buildProfileSection(selectedProject!),
                       Expanded(
                         child: selectedProject == null
-                            ? Center(child: Text("Select a project"))
+                            ? const Center(child: Text("Select a project"))
                             : ListView(
                           padding: EdgeInsets.zero,
                           children: [
@@ -235,7 +235,7 @@ class _ProjectspageState extends State<Projectspage> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
@@ -244,21 +244,21 @@ class _ProjectspageState extends State<Projectspage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('new Project', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 16),
+              const Text('new Project', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
                     child: TextFormField(
                       controller: nameController,
-                      decoration: InputDecoration(labelText: 'Name'),
+                      decoration: const InputDecoration(labelText: 'Name'),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => _pickImage(),
                     child: Container(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       color: Colors.grey[300],
                       child: Text(
                         _selectedImage != null ? 'Image Selected' : 'Image',
@@ -268,16 +268,16 @@ class _ProjectspageState extends State<Projectspage> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
                     child: TextFormField(
                       controller: descriptionController,
-                      decoration: InputDecoration(labelText: 'Description'),
+                      decoration: const InputDecoration(labelText: 'Description'),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
@@ -285,7 +285,7 @@ class _ProjectspageState extends State<Projectspage> {
                         selectedMemberIds = selectedMembers;
                       },
                       child: Container(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         color: Colors.grey[300],
                         child: Center(child: Text('Members: ${selectedMemberIds.length}')),
                       ),
@@ -293,25 +293,25 @@ class _ProjectspageState extends State<Projectspage> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
                     child: TextFormField(
                       controller: locationController,
-                      decoration: InputDecoration(labelText: 'Location'),
+                      decoration: const InputDecoration(labelText: 'Location'),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextFormField(
                       controller: categoryController,
-                      decoration: InputDecoration(labelText: 'Category'),
+                      decoration: const InputDecoration(labelText: 'Category'),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   String photoUrl = 'none';
@@ -336,7 +336,7 @@ class _ProjectspageState extends State<Projectspage> {
 
                   Navigator.pop(context); // Close the modal
                 },
-                child: Text('Create'),
+                child: const Text('Create'),
               ),
             ],
           ),
@@ -347,7 +347,7 @@ class _ProjectspageState extends State<Projectspage> {
 
   Widget _buildProfileSection(Project project) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       color: Colors.amber[200],
       child: Row(
         children: [
@@ -367,7 +367,7 @@ class _ProjectspageState extends State<Projectspage> {
               const SizedBox(height: 4),
                Text(
                 project.description,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             ],
           ),
@@ -385,7 +385,7 @@ class _ProjectspageState extends State<Projectspage> {
     return ListTile(
       leading: Icon(icon, color: Colors.green),
       title: Text(title),
-      trailing: trailingText != null ? Text(trailingText) : Icon(Icons.arrow_forward_ios, size: 16),
+      trailing: trailingText != null ? Text(trailingText) : const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
     );
   }
@@ -396,7 +396,7 @@ class _ProjectspageState extends State<Projectspage> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
@@ -404,13 +404,13 @@ class _ProjectspageState extends State<Projectspage> {
           future: UserService().getAllUsers(),
           builder: (context, AsyncSnapshot<List<QueryDocumentSnapshot>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No users available'));
+              return const Center(child: Text('No users available'));
             }
 
             final users = snapshot.data!;
@@ -454,7 +454,7 @@ class _ProjectspageState extends State<Projectspage> {
                       onPressed: () {
                         Navigator.pop(context, selectedUserIds);
                       },
-                      child: Text('Confirm Selection'),
+                      child: const Text('Confirm Selection'),
                     ),
                   ],
                 );

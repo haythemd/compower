@@ -4,6 +4,8 @@ import 'package:todo/models/todo.dart';
 import 'package:todo/services/todoService.dart';
 
 class AddTaskPage extends StatefulWidget {
+  const AddTaskPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _AddTaskState();
 }
@@ -111,8 +113,8 @@ class _AddTaskState extends State<AddTaskPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text('Select Task Dependency'),
-                        content: Container(
+                        title: const Text('Select Task Dependency'),
+                        content: SizedBox(
                           width: double.maxFinite,
                           child: ListView(
                             children: taskSnapshot.docs.map((doc) {
@@ -147,8 +149,8 @@ class _AddTaskState extends State<AddTaskPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text('Assign to Member'),
-                        content: Container(
+                        title: const Text('Assign to Member'),
+                        content: SizedBox(
                           width: double.maxFinite,
                           child: ListView(
                             children: memberSnapshot.docs.map((doc) {
@@ -239,31 +241,31 @@ class _AddTaskState extends State<AddTaskPage> {
     return await showModalBottomSheet<Duration>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: 200,
           child: Column(
             children: [
-              Text(
+              const Text(
                 'Pick Duration',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () => Navigator.pop(context, Duration(hours: 1)),
-                    child: Text('1 hr'),
+                    onPressed: () => Navigator.pop(context, const Duration(hours: 1)),
+                    child: const Text('1 hr'),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: () => Navigator.pop(context, Duration(hours: 2)),
-                    child: Text('2 hrs'),
+                    onPressed: () => Navigator.pop(context, const Duration(hours: 2)),
+                    child: const Text('2 hrs'),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: () => Navigator.pop(context, Duration(hours: 3)),
-                    child: Text('3 hrs'),
+                    onPressed: () => Navigator.pop(context, const Duration(hours: 3)),
+                    child: const Text('3 hrs'),
                   ),
                 ],
               )
@@ -287,7 +289,7 @@ class _AddTaskState extends State<AddTaskPage> {
     // Validate input (basic validation)
     if (taskName.isEmpty || dueDate.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Task name and due date are required!')),
+        const SnackBar(content: Text('Task name and due date are required!')),
       );
       return;
     }
@@ -308,7 +310,7 @@ class _AddTaskState extends State<AddTaskPage> {
     // Submit the task using the service
     service.createTodo(ToDo.fromJson(newTask)).then((value) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Task added successfully!')),
+        const SnackBar(content: Text('Task added successfully!')),
       );
       Navigator.pop(context);
     }).catchError((error) {

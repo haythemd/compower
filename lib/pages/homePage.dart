@@ -3,6 +3,8 @@ import '../models/project.dart';
 import '../services/projectService.dart';
 
 class ProjectsListPage extends StatefulWidget {
+  const ProjectsListPage({super.key});
+
   @override
   _ProjectsListPageState createState() => _ProjectsListPageState();
 }
@@ -14,19 +16,19 @@ class _ProjectsListPageState extends State<ProjectsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Projects'),
+        title: const Text('Projects'),
       ),
       body: StreamBuilder<List<Project>>(
         stream: _projectService.getAllProjects(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No projects available'));
+            return const Center(child: Text('No projects available'));
           }
 
           final projects = snapshot.data!;
@@ -40,7 +42,7 @@ class _ProjectsListPageState extends State<ProjectsListPage> {
                 subtitle: Text(project.description),
                 leading: project.photoUrl.isNotEmpty
                     ? Image.network(project.photoUrl, width: 50, height: 50, fit: BoxFit.cover)
-                    : Icon(Icons.image),
+                    : const Icon(Icons.image),
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     'project',
@@ -54,7 +56,7 @@ class _ProjectsListPageState extends State<ProjectsListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddProjectDialog(),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -70,30 +72,30 @@ class _ProjectsListPageState extends State<ProjectsListPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add New Project'),
+          title: const Text('Add New Project'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: const InputDecoration(labelText: 'Title'),
                 ),
                 TextField(
                   controller: descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: const InputDecoration(labelText: 'Description'),
                 ),
                 TextField(
                   controller: locationController,
-                  decoration: InputDecoration(labelText: 'Location'),
+                  decoration: const InputDecoration(labelText: 'Location'),
                 ),
                 TextField(
                   controller: businessTypeController,
-                  decoration: InputDecoration(labelText: 'Business Type'),
+                  decoration: const InputDecoration(labelText: 'Business Type'),
                 ),
                 TextField(
                   controller: photoUrlController,
-                  decoration: InputDecoration(labelText: 'Photo URL'),
+                  decoration: const InputDecoration(labelText: 'Photo URL'),
                 ),
               ],
             ),
@@ -101,7 +103,7 @@ class _ProjectsListPageState extends State<ProjectsListPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () async {
@@ -120,7 +122,7 @@ class _ProjectsListPageState extends State<ProjectsListPage> {
                 await _projectService.addProject(project);
                 Navigator.of(context).pop();
               },
-              child: Text('Add'),
+              child: const Text('Add'),
             ),
           ],
         );

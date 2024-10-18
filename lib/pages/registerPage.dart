@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../services/userService.dart'; // Import UserService
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -44,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration successful')),
+          const SnackBar(content: Text('Registration successful')),
         );
 
         // Navigate to home page
@@ -79,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
+      appBar: AppBar(title: const Text('Register')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 36.0, vertical: 18),
         child: Form(
@@ -89,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
             children: <Widget>[
               TextFormField(
                 controller: _displayNameController,
-                decoration: InputDecoration(labelText: 'Display Name'), // New field for displayName
+                decoration: const InputDecoration(labelText: 'Display Name'), // New field for displayName
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your display name';
@@ -97,10 +99,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -109,10 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -124,19 +126,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               if (_errorMessage != null) ...[
                 Text(
                   _errorMessage!,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
               ],
               _isLoading
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
                 onPressed: _register,
-                child: Text('Register'),
+                child: const Text('Register'),
               ),
             ],
           ),

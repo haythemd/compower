@@ -86,7 +86,7 @@ Future<String> _uploadImage(Uint8List imageData) async {
       photoUrl: imageUrl,
       location: _locationController.text,
       businessType: _businessTypeController.text,
-      members: _membersController.text.split(',').map((member) => FirebaseFirestore.instance.doc('members/'+member.trim())).toList(),
+      members: _membersController.text.split(',').map((member) => FirebaseFirestore.instance.doc('members/${member.trim()}')).toList(),
       tasks: [], metaData: {},
     );
 

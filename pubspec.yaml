@@ -39,6 +39,8 @@ dependencies:
   cloud_firestore: ^5.4.3
   firebase_storage: ^12.3.2
   grouped_list: ^4.0.0 
+  intl: ^0.18.0
+  numberpicker: ^2.0.0
   
 dev_dependencies:
   flutter_test:
